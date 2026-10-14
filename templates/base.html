@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Opportunity Match</title>
+  <style>
+    body{font-family:Arial,sans-serif;background:#f6f7fb;margin:0;}
+    .topbar{background:#fff;border-bottom:1px solid #e5e7eb;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;font-size:14px;}
+    .topbar a{color:#4338ca;text-decoration:none;}
+    .brand{font-weight:700;font-size:16px;}
+    .wrap{max-width:480px;margin:0 auto;padding:16px;}
+    .card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:14px;margin-bottom:10px;}
+    .card h3{margin:0 0 4px;font-size:15px;}
+    .meta{font-size:12px;color:#6b7280;}
+    .tag{display:inline-block;font-size:11px;background:#eef2ff;color:#4338ca;padding:2px 8px;border-radius:10px;margin-top:6px;}
+    .flash{background:#eef2ff;border:1px dashed #4338ca;border-radius:10px;padding:10px;font-size:13px;margin-bottom:12px;}
+    select,input,button{width:100%;padding:8px;margin-bottom:8px;box-sizing:border-box;}
+    button{background:#4338ca;color:#fff;border:none;border-radius:8px;padding:10px;font-weight:600;cursor:pointer;}
+  </style>
+</head>
+<body>
+<div class="topbar">
+  <a href="/" class="brand">Opportunity Match</a>
+  <div>
+    {% if session.get("username") %}
+      Hi, {{ session["username"] }} · <a href="/logout">Log out</a>
+    {% else %}
+      <a href="/login">Log in</a> · <a href="/register">Sign up</a>
+    {% endif %}
+  </div>
+</div>
+<div class="wrap">
+  {% with messages = get_flashed_messages() %}
+    {% for m in messages %}<div class="flash">{{ m }}</div>{% endfor %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+</div>
+</body>
+</html>

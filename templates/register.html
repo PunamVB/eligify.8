@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Create account</h2>
+<p class="meta">Use a username, not your real name. Profile details are optional and only used to pre-fill your filters.</p>
+<form method="post">
+  <input name="username" placeholder="Username" required>
+  <input name="password" type="password" placeholder="Password (6+ characters)" required>
+    <select name="cls" required>
+    <option value="">Class</option>
+    <option value="9">Class 9</option>
+    <option value="10">Class 10</option>
+    <option value="11">Class 11</option>
+    <option value="12">Class 12</option>
+    <option value="UG">UG</option>
+    <option value="PG">PG</option>
+  </select>
+    <select name="stream" id="stream_select">
+    <option value="">Stream</option>
+    <option value="Science">Science</option>
+    <option value="Commerce">Commerce</option>
+  </select>
+  <input name="course" id="course_input" placeholder="Your present course (e.g. B.Tech CSE)" style="display:none">
+  <input name="state" placeholder="State" required>
+  <select name="gender" required>
+    <option value="">Gender</option>
+    <option value="Female">Female</option>
+    <option value="Male">Male</option>
+    <option value="Any">Prefer not to say / Other</option>
+  </select>
+  <button type="submit">Sign up</button>
+</form>
+<p class="meta">Already registered? <a href="/login">Log in</a></p>
+<script>
+  const clsSel = document.querySelector('select[name="cls"]');
+  const streamSel = document.getElementById('stream_select');
+  const courseIn = document.getElementById('course_input');
+
+  function toggleStream() {
+    const school = clsSel.value === '11' || clsSel.value === '12';
+    const none = clsSel.value === '';
+    streamSel.style.display = (school || none) ? '' : 'none';
+    courseIn.style.display = (school || none) ? 'none' : '';
+    streamSel.required = school;
+    courseIn.required = !school && !none;
+  }
+
+  clsSel.addEventListener('change', toggleStream);
+  toggleStream();
+</script>
+{% endblock %}

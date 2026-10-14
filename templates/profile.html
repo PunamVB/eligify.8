@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Your profile</h2>
+<p class="meta">Used only to show you matching opportunities. Nothing else is collected.</p>
+<form method="post">
+    <select name="cls">
+    <option value="">Class</option>
+    <option value="9" {% if user.cls == '9' %}selected{% endif %}>Class 9</option>
+    <option value="10" {% if user.cls == '10' %}selected{% endif %}>Class 10</option>
+    <option value="11" {% if user.cls == '11' %}selected{% endif %}>Class 11</option>
+    <option value="12" {% if user.cls == '12' %}selected{% endif %}>Class 12</option>
+    <option value="UG" {% if user.cls == 'UG' %}selected{% endif %}>UG</option>
+    <option value="PG" {% if user.cls == 'PG' %}selected{% endif %}>PG</option>
+  </select>
+    <select name="stream" id="stream_select">
+    <option value="">Stream</option>
+    <option value="Science" {% if user.stream == 'Science' %}selected{% endif %}>Science</option>
+    <option value="Commerce" {% if user.stream == 'Commerce' %}selected{% endif %}>Commerce</option>
+  </select>
+  <input name="course" id="course_input" placeholder="Your present course (e.g. B.Tech CSE)"
+         value="{% if user.cls not in ('11', '12') %}{{ user.stream or '' }}{% endif %}" style="display:none">
+  <input name="state" placeholder="State" value="{{ user['state'] or '' }}" required>
+  <select name="gender">
+  <option value="Female" {% if user.gender == 'Female' %}selected{% endif %}>Female</option>
+  <option value="Male" {% if user.gender == 'Male' %}selected{% endif %}>Male</option>
+  <option value="Any" {% if user.gender == 'Any' %}selected{% endif %}>Prefer not to say / Other</option>
+</select>
+  <button type="submit">Save profile</button>
+</form>
+<script>
+  const clsSel = document.querySelector('select[name="cls"]');
+  const streamSel = document.getElementById('stream_select');
+  const courseIn = document.getElementById('course_input');
+
+  function toggleStream() {
+    const school = clsSel.value === '11' || clsSel.value === '12';
+    const none = clsSel.value === '';
+    streamSel.style.display = (school || none) ? '' : 'none';
+    courseIn.style.display = (school || none) ? 'none' : '';
+    streamSel.required = school;
+    courseIn.required = !school && !none;
+  }
+
+  clsSel.addEventListener('change', toggleStream);
+  toggleStream();
+</script>
+{% endblock %}

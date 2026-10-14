@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% if user %}
+  <h2>Matched for you</h2>
+  <p class="meta">Showing only opportunities you're eligible for:
+    Class {{ cls or "any" }} · {{ stream or "any stream" }} · {{ state or "any state" }}
+    · <a href="/profile">Edit profile</a></p>
+
+  {% if profile_incomplete %}
+  <div class="flash">Your profile is incomplete, so results may include opportunities that don't fit you. <a href="/profile">Complete it</a> for accurate matches.</div>
+  {% endif %}
+{% else %}
+  <h2>Find opportunities</h2>
+  <form method="get">
+      <select name="cls">
+      <option value="">Any class</option>
+      <option value="9" {% if cls=="9" %}selected{% endif %}>Class 9</option>
+      <option value="10" {% if cls=="10" %}selected{% endif %}>Class 10</option>
+      <option value="11" {% if cls=="11" %}selected{% endif %}>Class 11</option>
+      <option value="12" {% if cls=="12" %}selected{% endif %}>Class 12</option>
+      <option value="UG" {% if cls=="UG" %}selected{% endif %}>UG</option>
+      <option value="PG" {% if cls=="PG" %}selected{% endif %}>PG</option>
+    </select>
+    <select name="stream">
+      <option value="">Any stream</option>
+      <option value="Science" {% if stream=="Science" %}selected{% endif %}>Science</option>
+      <option value="Commerce" {% if stream=="Commerce" %}selected{% endif %}>Commerce</option>
+    </select>
+    <input name="state" placeholder="State (e.g. Karnataka)" value="{{ state }}">
+    <button type="submit">Find matches</button>
+  </form>
+  <div class="flash"><a href="/login">Log in</a> to see only the opportunities you qualify for.</div>
+{% endif %}
+
+<p class="meta">{{ items|length }} opportunities found</p>
+
+{% for o in items %}
+<div class="card">
+  <h3>{{ o["name"] }}</h3>
+  <div class="meta">
+    {% if o["class_max"] %}Class {{ o["class_min"] }}-{{ o["class_max"] }}{% else %}{{ o["class_min"] }}{% endif %}
+    · {{ o["stream"] }} · {{ o["state"] }} · Deadline: {{ o["deadline"] }}
+  </div>
+  <span class="tag">{{ o["type"] }}</span>
+  {% if o["cost"] %}<div class="meta">Cost: {{ o["cost"] }}</div>{% endif %}
+  {% if o["note"] %}<p class="meta">{{ o["note"] }}</p>{% endif %}
+  {% if o["official_link"] %}
+    <p><a href="{{ o['official_link'] }}" target="_blank" rel="noopener">Apply / Official page &rarr;</a></p>
+  {% endif %}
+  <div class="meta">Last verified: {{ o["last_verified"] }}</div>
+</div>
+{% endfor %}
+{% endblock %}
